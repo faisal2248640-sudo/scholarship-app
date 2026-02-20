@@ -1,0 +1,154 @@
+warning: in the working copy of 'app/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/layout.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/app/add-scholarship/login/page.tsx b/app/add-scholarship/login/page.tsx[m
+[1mindex 5c54d3e..cecc280 100644[m
+[1m--- a/app/add-scholarship/login/page.tsx[m
+[1m+++ b/app/add-scholarship/login/page.tsx[m
+[36m@@ -1,7 +1,7 @@[m
+ "use client";[m
+ [m
+ import { useState, useEffect } from 'react';[m
+[31m-import { supabase } from '../lib/supabase';[m
+[32m+[m[32mimport { supabase } from '../../../lib/supabase'[m
+ import { [m
+   LayoutGrid, [m
+   Medal, [m
+[1mdiff --git a/app/add-scholarship/page.tsx b/app/add-scholarship/page.tsx[m
+[1mindex 81bd8de..7527a0b 100644[m
+[1m--- a/app/add-scholarship/page.tsx[m
+[1m+++ b/app/add-scholarship/page.tsx[m
+[36m@@ -1,113 +1,104 @@[m
+ "use client";[m
+ [m
+[31m-import { useState } from 'react';[m
+[31m-import { supabase } from '../../lib/supabase'; // Adjust path if your lib is elsewhere[m
+[32m+[m[32mimport { useState, useEffect } from 'react';[m
+[32m+[m[32mimport { supabase } from '@/lib/supabase';[m
+[32m+[m[32mimport {[m[41m [m
+[32m+[m[32m  LayoutGrid, Medal, Search, Calendar,[m[41m [m
+[32m+[m[32m  User, LogOut, FlaskConical[m[41m [m
+[32m+[m[32m} from 'lucide-react';[m
+ [m
+[31m-export default function Login() {[m
+[31m-  const [email, setEmail] = useState('');[m
+[31m-  const [password, setPassword] = useState('');[m
+[31m-  const [isSignUp, setIsSignUp] = useState(false);[m
+[31m-  const [loading, setLoading] = useState(false);[m
+[31m-  const [message, setMessage] = useState('');[m
+[32m+[m[32mexport default function Home() {[m
+[32m+[m[32m  const [scholarships, setScholarships] = useState<any[]>([]);[m
+[32m+[m[32m  const [searchTerm, setSearchTerm] = useState('');[m
+[32m+[m[32m  const [activeTab, setActiveTab] = useState('Overview');[m
+ [m
+[31m-  const handleAuth = async (e: React.FormEvent) => {[m
+[31m-    e.preventDefault();[m
+[31m-    setLoading(true);[m
+[31m-    setMessage('');[m
+[31m-[m
+[31m-    try {[m
+[31m-      if (isSignUp) {[m
+[31m-        // SUPABASE SIGN UP LOGIC[m
+[31m-        const { error } = await supabase.auth.signUp({[m
+[31m-          email,[m
+[31m-          password,[m
+[31m-        });[m
+[31m-        if (error) throw error;[m
+[31m-        setMessage('Success! Check your email for the confirmation link.');[m
+[31m-      } else {[m
+[31m-        // SUPABASE LOG IN LOGIC[m
+[31m-        const { error } = await supabase.auth.signInWithPassword({[m
+[31m-          email,[m
+[31m-          password,[m
+[31m-        });[m
+[31m-        if (error) throw error;[m
+[31m-        setMessage('Successfully logged in!');[m
+[31m-        [m
+[31m-        // Redirect the user back to the home page after a successful login[m
+[31m-        setTimeout(() => {[m
+[31m-          window.location.href = '/';[m
+[31m-        }, 1500);[m
+[31m-      }[m
+[31m-    } catch (error: any) {[m
+[31m-      setMessage(error.message || 'An error occurred during authentication.');[m
+[31m-    } finally {[m
+[31m-      setLoading(false);[m
+[31m-    }[m
+[31m-  };[m
+[32m+[m[32m  // Sidebar Items matching your image[m
+[32m+[m[32m  const navItems = [[m
+[32m+[m[32m    { name: 'Overview', icon: <LayoutGrid size={20} /> },[m
+[32m+[m[32m    { name: 'Scholarships', icon: <Medal size={20} /> },[m
+[32m+[m[32m    { name: 'Research', icon: <FlaskConical size={20} /> },[m
+[32m+[m[32m    { name: 'Calendar', icon: <Calendar size={20} /> },[m
+[32m+[m[32m    { name: 'Profile', icon: <User size={20} /> },[m
+[32m+[m[32m  ];[m
+ [m
+   return ([m
+[31m-    <main className="min-h-screen flex items-center justify-center bg-gray-50 font-sans p-4">[m
+[31m-      <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-lg border border-gray-100">[m
+[31m-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-900">[m
+[31m-          {isSignUp ? 'Create an Account' : 'Welcome Back'}[m
+[31m-        </h1>[m
+[31m-        [m
+[31m-        <form onSubmit={handleAuth} className="flex flex-col gap-4">[m
+[31m-          <div>[m
+[31m-            <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>[m
+[31m-            <input [m
+[31m-              type="email" [m
+[31m-              required[m
+[31m-              value={email}[m
+[31m-              onChange={(e) => setEmail(e.target.value)}[m
+[31m-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition"[m
+[31m-              placeholder="you@example.com"[m
+[31m-            />[m
+[31m-          </div>[m
+[32m+[m[32m    <div className="flex min-h-screen bg-[#020617] text-slate-200 overflow-hidden relative">[m
+[32m+[m[41m      [m
+[32m+[m[32m      {/* 1. ANIMATED BACKGROUND BLOBS */}[m
+[32m+[m[32m      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">[m
+[32m+[m[32m        <div className="absolute -top-[10%] -left-[10%] w-[500px] h-[500px] rounded-full bg-sky-500/10 blur-[100px] animate-pulse"></div>[m
+[32m+[m[32m        <div className="absolute -bottom-[10%] -right-[10%] w-[500px] h-[500px] rounded-full bg-blue-700/10 blur-[100px] animate-pulse"></div>[m
+[32m+[m[32m      </div>[m
+ [m
+[31m-          <div>[m
+[31m-            <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>[m
+[31m-            <input [m
+[31m-              type="password" [m
+[31m-              required[m
+[31m-              value={password}[m
+[31m-              onChange={(e) => setPassword(e.target.value)}[m
+[31m-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition"[m
+[31m-              placeholder="••••••••"[m
+[31m-            />[m
+[31m-          </div>[m
+[32m+[m[32m      {/* 2. SIDEBAR */}[m
+[32m+[m[32m      <aside className="w-64 bg-[#0B0E14] border-r border-white/5 flex flex-col fixed h-full z-20">[m
+[32m+[m[32m        <div className="p-8 pb-12">[m
+[32m+[m[32m          <a href="/" className="text-3xl font-extrabold text-white tracking-tighter">[m
+[32m+[m[32m            UC<span className="text-purple-500">.</span>[m
+[32m+[m[32m          </a>[m
+[32m+[m[32m        </div>[m
+ [m
+[31m-          {/* Feedback Message (Errors or Success) */}[m
+[31m-          {message && ([m
+[31m-            <div className={`p-3 rounded-lg text-sm font-medium ${message.includes('error') ? 'bg-red-50 text-red-800' : 'bg-green-50 text-green-800'}`}>[m
+[31m-              {message}[m
+[31m-            </div>[m
+[31m-          )}[m
+[32m+[m[32m        <nav className="flex-1 px-4 space-y-2">[m
+[32m+[m[32m          {navItems.map((item) => ([m
+[32m+[m[32m            <button[m
+[32m+[m[32m              key={item.name}[m
+[32m+[m[32m              onClick={() => setActiveTab(item.name)}[m
+[32m+[m[32m              className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 group relative[m
+[32m+[m[32m                ${activeTab === item.name[m[41m [m
+[32m+[m[32m                  ? 'text-white bg-gradient-to-r from-purple-500/10 to-transparent'[m[41m [m
+[32m+[m[32m                  : 'text-slate-500 hover:text-slate-200'}`}[m
+[32m+[m[32m            >[m
+[32m+[m[32m              {/* Purple indicator from image */}[m
+[32m+[m[32m              {activeTab === item.name && ([m
+[32m+[m[32m                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-purple-500 rounded-r-full shadow-[0_0_15px_#a855f7]" />[m
+[32m+[m[32m              )}[m
+[32m+[m[32m              <span className={activeTab === item.name ? 'text-purp
